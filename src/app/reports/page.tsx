@@ -1,6 +1,7 @@
 import { getFinanceStats, getActivityStats, getDiaryStats } from './actions';
 import { StatCard } from '@/components/reports/StatCard';
-import { CategoryBreakdown } from '@/components/reports/CategoryBreakdown';
+import { SpendingMultiChart } from '@/components/reports/SpendingMultiChart';
+import { ActivityChart } from '@/components/reports/ActivityChart';
 import {
     Wallet,
     TrendingUp,
@@ -71,92 +72,89 @@ export default async function ReportsPage() {
             </div>
 
             {/* Finance Section */}
-            <section className="glass-card p-6">
-                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <Wallet size={22} className="text-emerald-600" />
-                    الإحصائيات المالية
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <StatCard
-                        title="الرصيد الحالي"
-                        value={`${formatAmount(financeStats.balance)} د.ج`}
-                        icon={Wallet}
-                        color={financeStats.balance >= 0 ? 'emerald' : 'rose'}
-                    />
-                    <StatCard
-                        title="إجمالي الدخل"
-                        value={`${formatAmount(financeStats.totalIncome)} د.ج`}
-                        subtitle={`هذا الشهر: ${formatAmount(financeStats.monthlyIncome)} د.ج`}
-                        icon={TrendingUp}
-                        color="emerald"
-                    />
-                    <StatCard
-                        title="إجمالي المصاريف"
-                        value={`${formatAmount(financeStats.totalExpense)} د.ج`}
-                        subtitle={`هذا الشهر: ${formatAmount(financeStats.monthlyExpense)} د.ج`}
-                        icon={TrendingDown}
-                        color="rose"
-                    />
-                    <StatCard
-                        title="عدد المعاملات"
-                        value={financeStats.transactionCount}
-                        icon={Sparkles}
-                        color="purple"
-                    />
+            <section className="space-y-6">
+                <div className="glass-card p-6">
+                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                        <Wallet size={22} className="text-emerald-600" />
+                        الإحصائيات المالية
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <StatCard
+                            title="الرصيد الحالي"
+                            value={`${formatAmount(financeStats.balance)} د.ج`}
+                            icon={Wallet}
+                            color={financeStats.balance >= 0 ? 'emerald' : 'rose'}
+                        />
+                        <StatCard
+                            title="إجمالي الدخل"
+                            value={`${formatAmount(financeStats.totalIncome)} د.ج`}
+                            subtitle={`هذا الشهر: ${formatAmount(financeStats.monthlyIncome)} د.ج`}
+                            icon={TrendingUp}
+                            color="emerald"
+                        />
+                        <StatCard
+                            title="إجمالي المصاريف"
+                            value={`${formatAmount(financeStats.totalExpense)} د.ج`}
+                            subtitle={`هذا الشهر: ${formatAmount(financeStats.monthlyExpense)} د.ج`}
+                            icon={TrendingDown}
+                            color="rose"
+                        />
+                        <StatCard
+                            title="عدد المعاملات"
+                            value={financeStats.transactionCount}
+                            icon={Sparkles}
+                            color="purple"
+                        />
+                    </div>
                 </div>
 
                 {expenseBreakdownItems.length > 0 && (
-                    <div className="mt-6">
-                        <CategoryBreakdown
-                            title="توزيع المصاريف حسب الفئة"
-                            items={expenseBreakdownItems}
-                        />
-                    </div>
+                    <SpendingMultiChart
+                        title="تحليل المصاريف"
+                        items={expenseBreakdownItems}
+                    />
                 )}
             </section>
 
             {/* Activity Section */}
-            <section className="glass-card p-6">
-                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <Clock size={22} className="text-blue-600" />
-                    إحصائيات النشاطات
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <StatCard
-                        title="إجمالي الوقت"
-                        value={`${activityStats.totalHours}س`}
-                        subtitle={`${activityStats.totalMinutes} دقيقة`}
-                        icon={Clock}
-                        color="primary"
-                    />
-                    <StatCard
-                        title="وقت اليوم"
-                        value={formatDuration(activityStats.todayMinutes)}
-                        icon={Zap}
-                        color="amber"
-                    />
-                    <StatCard
-                        title="وقت هذا الأسبوع"
-                        value={formatDuration(activityStats.weekMinutes)}
-                        icon={Flame}
-                        color="rose"
-                    />
-                    <StatCard
-                        title="متوسط التقييم"
-                        value={activityStats.avgRating > 0 ? `${activityStats.avgRating} / 5` : '-'}
-                        subtitle={`من ${activityStats.activityCount} نشاط`}
-                        icon={Star}
-                        color="amber"
-                    />
+            <section className="space-y-6">
+                <div className="glass-card p-6">
+                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                        <Clock size={22} className="text-blue-600" />
+                        إحصائيات النشاطات
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <StatCard
+                            title="إجمالي الوقت"
+                            value={`${activityStats.totalHours}س`}
+                            subtitle={`${activityStats.totalMinutes} دقيقة`}
+                            icon={Clock}
+                            color="primary"
+                        />
+                        <StatCard
+                            title="وقت اليوم"
+                            value={formatDuration(activityStats.todayMinutes)}
+                            icon={Zap}
+                            color="amber"
+                        />
+                        <StatCard
+                            title="وقت هذا الأسبوع"
+                            value={formatDuration(activityStats.weekMinutes)}
+                            icon={Flame}
+                            color="rose"
+                        />
+                        <StatCard
+                            title="متوسط التقييم"
+                            value={activityStats.avgRating > 0 ? `${activityStats.avgRating} / 5` : '-'}
+                            subtitle={`من ${activityStats.activityCount} نشاط`}
+                            icon={Star}
+                            color="amber"
+                        />
+                    </div>
                 </div>
 
                 {timeBreakdownItems.length > 0 && (
-                    <div className="mt-6">
-                        <CategoryBreakdown
-                            title="توزيع الوقت حسب الفئة"
-                            items={timeBreakdownItems}
-                        />
-                    </div>
+                    <ActivityChart items={timeBreakdownItems} />
                 )}
             </section>
 

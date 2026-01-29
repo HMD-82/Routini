@@ -55,7 +55,7 @@ function LiveDuration({ startTime }: { startTime: Date }) {
     }, [startTime]);
 
     return (
-        <span className="text-2xl font-bold text-primary animate-pulse">
+        <span className="text-2xl font-bold text-blue-600 animate-pulse">
             {formatDuration(duration)}
         </span>
     );
@@ -107,34 +107,35 @@ export function ActivityCard({
     return (
         <div
             className={cn(
-                "glass-card p-5 relative overflow-hidden group transition-all duration-300 hover:-translate-y-1",
-                isActive && "ring-2 ring-primary/50 bg-primary/5"
+                "bg-white p-5 rounded-3xl border border-gray-100 shadow-sm transition-all duration-300 relative overflow-hidden group",
+                "hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-offset-0 hover:border-transparent",
+                isActive ? "ring-2 ring-blue-400 bg-blue-50/30 border-blue-200" : "hover:ring-gray-300"
             )}
         >
             {/* Active Indicator */}
             {isActive && (
-                <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-l from-primary to-accent" />
+                <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-500" />
             )}
 
-            {/* Category Badge */}
-            <div className="flex items-center justify-between mb-3">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
                 <span
-                    className="text-xs font-medium px-3 py-1 rounded-full"
+                    className="text-xs font-bold px-3 py-1.5 rounded-full border"
                     style={{
-                        backgroundColor: `${category.color}20`,
-                        color: category.color || 'var(--primary)',
+                        backgroundColor: `${category.color}15`,
+                        color: category.color || '#4b5563',
+                        borderColor: `${category.color}30`,
                     }}
                 >
                     {category.name}
                 </span>
 
-                {/* Actions */}
                 <div className="flex items-center gap-2">
                     {isActive ? (
                         <button
                             onClick={handleStop}
                             disabled={isPending}
-                            className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                            className="p-2 bg-rose-500 text-white rounded-xl hover:bg-rose-600 transition-colors shadow-lg shadow-rose-200"
                             title="إيقاف النشاط"
                         >
                             <Square size={16} fill="currentColor" />
@@ -143,70 +144,69 @@ export function ActivityCard({
                         <button
                             onClick={handleDelete}
                             disabled={isPending}
-                            className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                            className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors opacity-0 group-hover:opacity-100"
                             title="حذف النشاط"
                         >
-                            <Trash2 size={16} />
+                            <Trash2 size={18} />
                         </button>
                     )}
                 </div>
             </div>
 
-            {/* Title & Description */}
-            <h3 className="text-lg font-bold mb-1">{title}</h3>
+            {/* Content */}
+            <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
             {description && (
-                <p className="text-sm text-muted-foreground mb-3">{description}</p>
+                <p className="text-sm text-gray-500 mb-4 line-clamp-2">{description}</p>
             )}
 
-            {/* Time Info */}
-            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                <div className="flex items-center gap-1">
-                    <Clock size={14} />
-                    <span>{formatTime(startTime)}</span>
-                    {endTime && (
-                        <>
-                            <span>-</span>
-                            <span>{formatTime(endTime)}</span>
-                        </>
+            {/* Footer */}
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                <div className="flex flex-col">
+                    <span className="text-xs text-gray-400 mb-1">المدة</span>
+                    {isActive ? (
+                        <LiveDuration startTime={startTime} />
+                    ) : (
+                        <span className="text-lg font-bold text-gray-700">
+                            {duration ? formatDuration(duration) : '-'}
+                        </span>
                     )}
                 </div>
-            </div>
 
-            {/* Duration */}
-            <div className="flex items-center justify-between">
-                {isActive ? (
-                    <LiveDuration startTime={startTime} />
-                ) : (
-                    <span className="text-lg font-bold text-foreground">
-                        {duration ? formatDuration(duration) : '-'}
+                {/* Rating or Time */}
+                <div className="flex flex-col items-end">
+                    <span className="text-xs text-gray-400 mb-1">
+                        {isActive ? 'بدأ في' : 'التقييم'}
                     </span>
-                )}
-
-                {/* Rating (only for completed activities) */}
-                {!isActive && (
-                    <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <button
-                                key={star}
-                                onClick={() => handleRate(star)}
-                                onMouseEnter={() => setHoveredRating(star)}
-                                onMouseLeave={() => setHoveredRating(null)}
-                                disabled={isPending}
-                                className="p-0.5 transition-transform hover:scale-110 disabled:opacity-50"
-                            >
-                                <Star
-                                    size={16}
-                                    className={cn(
-                                        "transition-colors",
-                                        (hoveredRating !== null ? star <= hoveredRating : star <= (rating || 0))
-                                            ? "text-amber-500 fill-amber-500"
-                                            : "text-muted-foreground/30"
-                                    )}
-                                />
-                            </button>
-                        ))}
-                    </div>
-                )}
+                    {isActive ? (
+                        <span className="text-sm font-medium text-gray-600 flex items-center gap-1" suppressHydrationWarning>
+                            <Clock size={14} />
+                            {formatTime(startTime)}
+                        </span>
+                    ) : (
+                        <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                    key={star}
+                                    onClick={() => handleRate(star)}
+                                    onMouseEnter={() => setHoveredRating(star)}
+                                    onMouseLeave={() => setHoveredRating(null)}
+                                    disabled={isPending}
+                                    className="p-0.5 transition-transform hover:scale-110"
+                                >
+                                    <Star
+                                        size={16}
+                                        className={cn(
+                                            "transition-colors",
+                                            (hoveredRating !== null ? star <= hoveredRating : star <= (rating || 0))
+                                                ? "text-amber-400 fill-amber-400"
+                                                : "text-gray-200 fill-gray-100"
+                                        )}
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

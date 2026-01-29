@@ -13,71 +13,75 @@ interface StatCardProps {
     };
 }
 
-const colorClasses = {
+const colorStyles = {
     primary: {
-        bg: 'bg-primary/10',
-        text: 'text-primary',
-        blur: 'bg-primary/10',
+        bg: 'bg-indigo-50 text-indigo-600',
+        ring: 'hover:ring-indigo-300',
+        shadow: 'hover:shadow-indigo-100',
     },
     emerald: {
-        bg: 'bg-emerald-100',
-        text: 'text-emerald-600',
-        blur: 'bg-emerald-500/10',
+        bg: 'bg-emerald-50 text-emerald-600',
+        ring: 'hover:ring-emerald-300',
+        shadow: 'hover:shadow-emerald-100',
     },
     rose: {
-        bg: 'bg-rose-100',
-        text: 'text-rose-500',
-        blur: 'bg-rose-500/10',
+        bg: 'bg-rose-50 text-rose-600',
+        ring: 'hover:ring-rose-300',
+        shadow: 'hover:shadow-rose-100',
     },
     amber: {
-        bg: 'bg-amber-100',
-        text: 'text-amber-600',
-        blur: 'bg-amber-500/10',
+        bg: 'bg-amber-50 text-amber-600',
+        ring: 'hover:ring-amber-300',
+        shadow: 'hover:shadow-amber-100',
     },
     purple: {
-        bg: 'bg-purple-100',
-        text: 'text-purple-600',
-        blur: 'bg-purple-500/10',
+        bg: 'bg-purple-50 text-purple-600',
+        ring: 'hover:ring-purple-300',
+        shadow: 'hover:shadow-purple-100',
     },
     blue: {
-        bg: 'bg-blue-100',
-        text: 'text-blue-600',
-        blur: 'bg-blue-500/10',
+        bg: 'bg-blue-50 text-blue-600',
+        ring: 'hover:ring-blue-300',
+        shadow: 'hover:shadow-blue-100',
     },
 };
 
 export function StatCard({ title, value, subtitle, icon: Icon, color, trend }: StatCardProps) {
-    const colors = colorClasses[color];
+    const styles = colorStyles[color];
 
     return (
-        <div className="glass-card p-5 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
-            <div className={cn("absolute top-0 left-0 w-24 h-24 rounded-full -translate-x-8 -translate-y-8 blur-2xl transition-all", colors.blur, "group-hover:scale-150")} />
-
-            <div className="flex justify-between items-start mb-3 relative">
-                <div className={cn("p-3 rounded-xl", colors.bg, colors.text)}>
-                    <Icon size={22} />
+        <div className={cn(
+            "bg-white p-6 rounded-3xl border border-gray-100 shadow-sm transition-all duration-300 cursor-default relative overflow-hidden",
+            "hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-offset-0 hover:border-transparent",
+            styles.ring,
+            styles.shadow
+        )}>
+            <div className="flex items-center gap-5">
+                <div className={cn("p-4 rounded-2xl shrink-0 transition-colors", styles.bg)}>
+                    <Icon size={26} strokeWidth={2} />
                 </div>
-                {trend && (
-                    <span
-                        className={cn(
-                            "flex items-center text-xs font-medium px-2 py-1 rounded-full",
-                            trend.isPositive
-                                ? "text-emerald-600 bg-emerald-100"
-                                : "text-rose-600 bg-rose-100"
+
+                <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
+                    <div className="flex items-end gap-2">
+                        <h3 className="text-2xl font-bold text-gray-900 leading-none tracking-tight">{value}</h3>
+                        {trend && (
+                            <span className={cn(
+                                "text-xs font-bold px-2 py-0.5 rounded-full",
+                                trend.isPositive ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"
+                            )}>
+                                {trend.value}
+                            </span>
                         )}
-                    >
-                        {trend.value}
-                    </span>
-                )}
+                    </div>
+                </div>
             </div>
 
-            <div className="relative">
-                <p className="text-muted-foreground text-sm font-medium mb-1">{title}</p>
-                <h3 className="text-2xl font-bold">{value}</h3>
-                {subtitle && (
-                    <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
-                )}
-            </div>
+            {subtitle && (
+                <div className="mt-4 pt-4 border-t border-gray-50 text-xs font-medium text-gray-400 flex items-center gap-1">
+                    {subtitle}
+                </div>
+            )}
         </div>
     );
 }

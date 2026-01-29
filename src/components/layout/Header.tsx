@@ -36,7 +36,7 @@ export function Header() {
                     background: linear-gradient(
                         90deg,
                         transparent,
-                        rgba(255, 255, 255, 0.5),
+                        rgba(255, 255, 255, 0.4),
                         transparent
                     );
                     transition: left 0.5s ease;
@@ -48,49 +48,55 @@ export function Header() {
 
             <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4">
-                    <div className="flex items-center justify-between h-16">
-                        {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xl">
-                                ر
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-bold text-gray-800">
-                                    روتيني
-                                </h1>
-                            </div>
-                        </Link>
+                    <div className="flex items-center h-16 relative">
+                        {/* Logo - Absolute Left (Right in RTL) */}
+                        <div className="flex items-center gap-3 absolute right-0">
+                            <Link href="/" className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xl shadow-emerald-200 shadow-md">
+                                    ر
+                                </div>
+                                <div className="hidden sm:block">
+                                    <h1 className="text-xl font-bold text-gray-800">
+                                        روتيني
+                                    </h1>
+                                </div>
+                            </Link>
+                        </div>
 
-                        {/* Desktop Navigation */}
-                        <nav className="hidden md:flex items-center gap-2">
-                            {navItems.map((item) => {
-                                const Icon = item.icon;
-                                const isActive = pathname === item.href;
-                                return (
-                                    <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className={cn(
-                                            "nav-btn flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-200",
-                                            isActive
-                                                ? "bg-emerald-500 text-white shadow-md"
-                                                : "bg-gray-100 text-gray-700 hover:bg-emerald-100 hover:text-emerald-700"
-                                        )}
-                                    >
-                                        <Icon size={18} />
-                                        <span className="underline underline-offset-2">{item.label}</span>
-                                    </Link>
-                                );
-                            })}
-                        </nav>
+                        {/* Desktop Navigation - Centered */}
+                        <div className="hidden md:flex flex-1 justify-center items-center">
+                            <nav className="flex items-center gap-1 p-1 bg-gray-50/80 rounded-full border border-gray-100 shadow-inner">
+                                {navItems.map((item) => {
+                                    const Icon = item.icon;
+                                    const isActive = pathname === item.href;
+                                    return (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            className={cn(
+                                                "nav-btn flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-300",
+                                                isActive
+                                                    ? "bg-emerald-500 text-white shadow-md transform scale-105"
+                                                    : "text-gray-600 hover:text-emerald-700 hover:bg-white"
+                                            )}
+                                        >
+                                            <Icon size={18} />
+                                            <span>{item.label}</span>
+                                        </Link>
+                                    );
+                                })}
+                            </nav>
+                        </div>
 
-                        {/* Mobile Menu Button */}
-                        <button
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600"
-                        >
-                            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                        </button>
+                        {/* Mobile Menu Button - Absolute Left */}
+                        <div className="md:hidden absolute left-0">
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600"
+                            >
+                                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -107,14 +113,14 @@ export function Header() {
                                         href={item.href}
                                         onClick={() => setMobileMenuOpen(false)}
                                         className={cn(
-                                            "nav-btn flex items-center gap-3 px-4 py-3 rounded-full transition-all font-medium",
+                                            "nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-medium",
                                             isActive
                                                 ? "bg-emerald-500 text-white shadow-md"
-                                                : "bg-gray-100 text-gray-700 hover:bg-emerald-100"
+                                                : "bg-gray-50 text-gray-700 hover:bg-emerald-50"
                                         )}
                                     >
                                         <Icon size={20} />
-                                        <span className="underline underline-offset-2">{item.label}</span>
+                                        <span>{item.label}</span>
                                     </Link>
                                 );
                             })}
