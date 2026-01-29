@@ -3,7 +3,7 @@ import './globals.css';
 import { Header } from '@/components/layout/Header';
 
 export const metadata: Metadata = {
-  title: 'حياتي | Hayati',
+  title: 'روتيني | Routini',
   description: 'تطبيقك الشخصي لتنظيم يومياتك ومصاريفك ونشاطاتك بذكاء',
 };
 
