@@ -1,10 +1,11 @@
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import React from 'react';
 
 interface StatCardProps {
     title: string;
-    value: string | number;
-    subtitle?: string;
+    value: string | number | React.ReactNode;
+    subtitle?: string | React.ReactNode;
     icon: LucideIcon;
     color: 'primary' | 'emerald' | 'rose' | 'amber' | 'purple' | 'blue';
     trend?: {
@@ -64,7 +65,7 @@ export function StatCard({ title, value, subtitle, icon: Icon, color, trend }: S
                 <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
                     <div className="flex items-end gap-2">
-                        <h3 className="text-2xl font-bold text-gray-900 leading-none tracking-tight">{value}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 leading-none tracking-tight" suppressHydrationWarning>{value}</h3>
                         {trend && (
                             <span className={cn(
                                 "text-xs font-bold px-2 py-0.5 rounded-full",
@@ -78,7 +79,7 @@ export function StatCard({ title, value, subtitle, icon: Icon, color, trend }: S
             </div>
 
             {subtitle && (
-                <div className="mt-4 pt-4 border-t border-gray-50 text-xs font-medium text-gray-400 flex items-center gap-1">
+                <div className="mt-4 pt-4 border-t border-gray-50 text-xs font-medium text-gray-400 flex items-center gap-1" suppressHydrationWarning>
                     {subtitle}
                 </div>
             )}

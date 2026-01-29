@@ -2,7 +2,7 @@
 
 import { Save, User, Globe, Palette, Wallet, DollarSign, Target } from 'lucide-react';
 import { updateSettings } from '@/app/settings/actions';
-import { useTransition } from 'react';
+import { useTransition, useState, useEffect } from 'react';
 import { showSuccess } from '@/lib/alerts';
 import { cn } from '@/lib/utils';
 
@@ -21,6 +21,7 @@ interface SettingsFormProps {
 
 export function SettingsForm({ settings }: SettingsFormProps) {
     const [isPending, startTransition] = useTransition();
+    const [currentTheme, setCurrentTheme] = useState(settings.theme);
 
     const handleSubmit = (formData: FormData) => {
         startTransition(async () => {
@@ -28,6 +29,28 @@ export function SettingsForm({ settings }: SettingsFormProps) {
             showSuccess('تم حفظ الإعدادات بنجاح! ⚙️');
         });
     };
+
+    const handleThemeChange = (theme: string) => {
+        setCurrentTheme(theme);
+        const root = window.document.documentElement;
+        if (theme === 'dark') {
+            root.setAttribute('data-theme', 'dark');
+        } else if (theme === 'light') {
+            root.removeAttribute('data-theme');
+        } else {
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            if (systemTheme === 'dark') {
+                root.setAttribute('data-theme', 'dark');
+            } else {
+                root.removeAttribute('data-theme');
+            }
+        }
+    };
+
+    // Sync theme on mount to match server settings
+    useEffect(() => {
+        handleThemeChange(settings.theme);
+    }, [settings.theme]);
 
     return (
         <form action={handleSubmit} className="space-y-8">
@@ -83,7 +106,7 @@ export function SettingsForm({ settings }: SettingsFormProps) {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">نظام الألوان</label>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-3 gap-4" suppressHydrationWarning>
                         {[
                             { value: 'light', label: 'فاتح', icon: '☀️' },
                             { value: 'dark', label: 'مظلم', icon: '🌙' },
@@ -94,15 +117,17 @@ export function SettingsForm({ settings }: SettingsFormProps) {
                                     type="radio"
                                     name="theme"
                                     value={option.value}
-                                    defaultChecked={settings.theme === option.value}
+                                    checked={currentTheme === option.value}
+                                    onChange={() => handleThemeChange(option.value)}
                                     className="peer sr-only"
+                                    suppressHydrationWarning
                                 />
                                 <div className={cn(
-                                    "p-4 rounded-xl border-2 border-gray-100 bg-gray-50 transition-all text-center group-hover:bg-gray-100 group-hover:border-gray-200",
-                                    "peer-checked:bg-purple-50 peer-checked:border-purple-500 peer-checked:text-purple-700"
-                                )}>
-                                    <span className="text-2xl mb-1 block">{option.icon}</span>
-                                    <span className="text-sm font-medium">{option.label}</span>
+                                    "p-3 rounded-xl border border-gray-100 bg-gray-50 transition-all text-center group-hover:bg-gray-100 group-hover:border-gray-200",
+                                    currentTheme === option.value && "bg-purple-50 border-purple-500 text-purple-700 ring-1 ring-purple-200"
+                                )} suppressHydrationWarning>
+                                    <span className="text-xl mb-1 block">{option.icon}</span>
+                                    <span className="text-xs font-bold">{option.label}</span>
                                 </div>
                             </label>
                         ))}
@@ -161,7 +186,7 @@ export function SettingsForm({ settings }: SettingsFormProps) {
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="w-full md:w-auto md:min-w-[200px] px-8 py-4 bg-gray-900 text-white rounded-full font-bold shadow-xl hover:bg-black hover:-translate-y-1 hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mx-auto"
+                    className="w-full md:w-auto md:min-w-[240px] px-8 py-4 bg-emerald-600 text-white rounded-full font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:-translate-y-1 hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mx-auto border-2 border-emerald-500/20"
                 >
                     <Save size={20} />
                     {isPending ? 'جارٍ الحفظ...' : 'حفظ التغييرات'}

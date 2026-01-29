@@ -25,6 +25,7 @@ export function Header() {
                 .nav-btn {
                     position: relative;
                     overflow: hidden;
+                    text-decoration: none !important;
                 }
                 .nav-btn::before {
                     content: '';
@@ -44,6 +45,9 @@ export function Header() {
                 .nav-btn:hover::before {
                     left: 100%;
                 }
+                a {
+                    text-decoration: none;
+                }
             `}</style>
 
             <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
@@ -51,12 +55,12 @@ export function Header() {
                     <div className="flex items-center h-16 relative">
                         {/* Logo - Absolute Left (Right in RTL) */}
                         <div className="flex items-center gap-3 absolute right-0">
-                            <Link href="/" className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xl shadow-emerald-200 shadow-md">
+                            <Link href="/" className="flex items-center gap-3 no-underline group">
+                                <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xl shadow-emerald-200 shadow-md group-hover:scale-110 transition-transform">
                                     ر
                                 </div>
                                 <div className="hidden sm:block">
-                                    <h1 className="text-xl font-bold text-gray-800">
+                                    <h1 className="text-xl font-bold text-gray-800 group-hover:text-emerald-600 transition-colors">
                                         روتيني
                                     </h1>
                                 </div>
@@ -74,7 +78,7 @@ export function Header() {
                                             key={item.href}
                                             href={item.href}
                                             className={cn(
-                                                "nav-btn flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-300",
+                                                "nav-btn flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 no-underline",
                                                 isActive
                                                     ? "bg-emerald-500 text-white shadow-md transform scale-105"
                                                     : "text-gray-600 hover:text-emerald-700 hover:bg-white"
@@ -113,7 +117,7 @@ export function Header() {
                                         href={item.href}
                                         onClick={() => setMobileMenuOpen(false)}
                                         className={cn(
-                                            "nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-medium",
+                                            "nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-medium no-underline",
                                             isActive
                                                 ? "bg-emerald-500 text-white shadow-md"
                                                 : "bg-gray-50 text-gray-700 hover:bg-emerald-50"
