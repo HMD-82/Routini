@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// User settings and global configurations
+model Settings {
+  id             Int     @id @default(1)
+  username       String  @default("المستخدم") // User
+  language       String  @default("ar")
+  theme          String  @default("system")
+  currency       String  @default("DZD")
+  monthlyBudget  Float   @default(0)
+  updatedAt      DateTime @updatedAt
+}
+
+// Diary entries for daily journaling
+model DiaryEntry {
+  id        String   @id @default(uuid())
+  content   String
+  mood      String?  // e.g., 'happy', 'neutral', 'sad', 'productive'
+  tags      String?  // Comma-separated tags
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Categories for both Activities and Finance
+// This allows uniform management of "types" of things
+model Category {
+  id           String @id @default(uuid())
+  name         String
+  type         String // 'activity', 'income', 'expense'
+  icon         String? // Name of the icon to display
+  color        String? // Hex color code
+  isSystem     Boolean @default(false) // Prevents deletion of default categories
+  
+  activities   Activity[]
+  transactions Transaction[]
+  
+  createdAt    DateTime @default(now())
+}
+
+// Activity logging for time tracking
+model Activity {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  duration    Int?     // Duration in minutes, calculated on completion
+  rating      Int?     // User rating of productivity/satisfaction (1-5)
+  
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Financial transactions (Income and Expenses)
+model Transaction {
+  id          String   @id @default(uuid())
+  amount      Float
+  type        String   // 'income' or 'expense'
+  date        DateTime @default(now())
+  description String?
+  
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
